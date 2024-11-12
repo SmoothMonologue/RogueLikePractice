@@ -10,7 +10,7 @@ function displayLobby() {
     // 타이틀 텍스트
     console.log(
         chalk.cyan(
-            figlet.textSync('RL- Javascript', {
+            figlet.textSync('Pokémon Mystery Dungeon', {
                 font: 'Standard',
                 horizontalLayout: 'default',
                 verticalLayout: 'default'
@@ -23,7 +23,7 @@ function displayLobby() {
     console.log(line);
 
     // 게임 이름
-    console.log(chalk.yellowBright.bold('CLI 게임에 오신것을 환영합니다!'));
+    console.log(chalk.yellowBright.bold('포켓몬 불가사의 던전에 오신것을 환영합니다!'));
 
     // 설명 텍스트
     console.log(chalk.green('옵션을 선택해주세요.'));
