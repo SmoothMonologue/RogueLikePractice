@@ -198,7 +198,7 @@ const battle = async (stage, player, monster) => {
         else if (choice == 2) {
             damage = monster.attack(player);
             monster.checkHeathPoint(0);
-            player.checkHeathPoint(monster.attack());
+            player.checkHeathPoint(damage);
         }
     }
 
@@ -213,16 +213,22 @@ export async function startGame() {
 
     while (stage <= 10) {
         const monster = bulbasaur;
+        player._HP = 35;
+        monster._HP = 45;
         //console.log(player, monster);
         await battle(stage, player, monster);
 
         // 스테이지 클리어 및 게임 종료 조건
         if (player.HP <= 0) {
-            console.log("게임 오버");
+            console.log(
+                chalk.green(
+                    `\n${player._name}은 쓰러졌다!`,
+                ),
+            );
             break;
         }
         console.log(stage, player);
         stage++;
     }
-    console.log("게임 끝.");
+    console.log("게임 오버.");
 }
