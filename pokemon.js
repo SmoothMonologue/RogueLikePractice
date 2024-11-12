@@ -111,12 +111,16 @@ class Pokemon {
 
     //(데미지 = (위력 × 공격 × (레벨 × [[급소]] × 2 ÷ 5 + 2 ) ÷ 방어 ÷ 50 + 2 ) × [[자속 보정]] × 타입상성1 × 타입상성2 × 랜덤수/255)
     attack(power, opponent) {
-        console.log(this._ATK, opponent._DEF);
         return Math.floor((power * this._ATK / opponent._DEF / 50 + 2) * (Math.random() * 38 + 179) * 10 / 255);
     }
 
     checkHeathPoint(gotDamage) {
         this._HP -= gotDamage;
+        console.log(
+            chalk.green(
+                `\n${this._name}에게 ${gotDamage}데미지!`,
+            ),
+        );
     }
 
     checkFainted() {
@@ -132,33 +136,19 @@ class Pokemon {
     }
 }
 
-// console.log(pikachu.name, pikachu.type, pikachu.ATK);
-// pikachu.name = "라이츄";
-// console.log(pikachu.name);
-// pikachu.name = 1;
-// console.log(pikachu.name);
-
 function displayStatus(stage, player, monster) {
     console.log(chalk.magentaBright(`\n=== Current Status ===`));
     console.log(
         chalk.cyanBright(`| Stage: ${stage} |
             `) +
         chalk.blueBright(
-            `| 플레이어 정보 |
-                이름: ${player._name}
-                타입: ${player._type}
-                체력: ${player._HP}
-                공격력: ${player._ATK}
-                방어력: ${player._DEF}
+            `| 플레이어 정보 |  이름: ${player._name}   타입: ${player._type}
+            체력: ${player._HP} 공격력: ${player._ATK}  방어력: ${player._DEF}
             `,
         ) +
         chalk.redBright(
-            `| 몬스터 정보 |
-                이름: ${monster._name}
-                타입: ${monster._type}
-                체력: ${monster._HP}
-                공격력: ${monster._ATK}
-                방어력: ${monster._DEF}`,
+            `| 몬스터 정보 |    이름: ${monster._name}  타입: ${monster._type}
+            체력: ${monster._HP}    공격력: ${monster._ATK} 방어력: ${monster._DEF}`,
         ),
     );
     console.log(chalk.magentaBright(`=====================\n`));
@@ -186,13 +176,6 @@ const battle = async (stage, player, monster) => {
         if (choice == 1) {
             damage = player.attack(10, monster);
             monster.checkHeathPoint(damage);
-            console.log(
-                chalk.green(
-                    `\n${monster._name}에게 ${damage}데미지!`,
-                ),
-            );
-
-
         }
         else if (choice == 2) {
             console.log(
@@ -211,11 +194,6 @@ const battle = async (stage, player, monster) => {
         }
         damage = monster.attack(10, player);
         player.checkHeathPoint(damage);
-        console.log(
-            chalk.green(
-                `\n${player._name}에게 ${damage}데미지!`,
-            ),
-        );
     }
 };
 
@@ -230,8 +208,8 @@ export async function startGame() {
     let stage = 1;
 
     while (stage <= 10) {
-        player._HP = 350;
-        monster._HP = 450;
+        player._HP = 35;
+        monster._HP = 45;
         //console.log(player, monster);
         await battle(stage, player, monster);
 
