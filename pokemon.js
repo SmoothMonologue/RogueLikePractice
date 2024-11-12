@@ -1,13 +1,14 @@
+import chalk from 'chalk';
+import readlineSync from 'readline-sync';
 const typeOfPoke = ["불꽃", "풀", "물", "전기", "노말", "격투", "고스트", "에스퍼", "땅", "바위", "강철", "비행", "벌레", "얼음", "독", "악", "드래곤", "페어리"];
 
 class Pokemon {
-    constructor(name, type, HP, ATK, DEF, SPD) {
+    constructor(name, type, HP, ATK, DEF) {
         this._name = name;
         this._type = type;
         this._HP = HP;
         this._ATK = ATK;
         this._DEF = DEF;
-        this._SPD = SPD;
     }
 
     get name() {
@@ -91,26 +92,110 @@ class Pokemon {
         this._DEF = value;
     }
 
-    get SPD() {
-        return this._SPD;
+    // get SPD() {
+    //     return this._SPD;
+    // }
+
+    // set SPD(value) {
+    //     if (value.length <= 0) {
+    //         console.log("스피드가 입력되지 않았습니다.");
+    //         return;
+    //     }
+    //     else if (typeof value != "number") {
+    //         console.log("입력된 스피드가 수가 아닙니다.");
+    //         return;
+    //     }
+    //     this._SPD = value;
+    // }
+
+    //(데미지 = (위력 × 공격 × (레벨 × [[급소]] × 2 ÷ 5 + 2 ) ÷ 방어 ÷ 50 + 2 ) × [[자속 보정]] × 타입상성1 × 타입상성2 × 랜덤수/255)
+    attack(opponent) {
+        return Math.floor((10 * this._ATK / opponent._DEF / 50 + 2) * (Math.random() * 38 + 179) * 100 / 255);
     }
 
-    set SPD(value) {
-        if (value.length <= 0) {
-            console.log("스피드가 입력되지 않았습니다.");
-            return;
-        }
-        else if (typeof value != "number") {
-            console.log("입력된 스피드가 수가 아닙니다.");
-            return;
-        }
-        this._SPD = value;
+    checkHeathPoint(gotDamage) {
+        this._HP -= gotDamage;
     }
 }
 
-const pikachu = new Pokemon("피카츄", "전기");
-console.log(pikachu.name, pikachu.type, pikachu.ATK);
-pikachu.name = "라이츄";
-console.log(pikachu.name);
-pikachu.name = 1;
-console.log(pikachu.name);
+const pikachu = new Pokemon("피카츄", "전기", 35, 55, 40);
+const bulbasaur = new Pokemon("이상해씨", "풀", 45, 49, 49);
+
+// console.log(pikachu.name, pikachu.type, pikachu.ATK);
+// pikachu.name = "라이츄";
+// console.log(pikachu.name);
+// pikachu.name = 1;
+// console.log(pikachu.name);
+
+function displayStatus(stage, player, monster) {
+    console.log(chalk.magentaBright(`\n=== Current Status ===`));
+    console.log(
+        chalk.cyanBright(`| Stage: ${stage} `) +
+        chalk.blueBright(
+            `| 플레이어 정보 |
+                이름: ${player._name}
+                타입: ${player._type}
+                공격력: ${player._ATK}
+                방어력: ${player._DEF}`,
+        ) +
+        chalk.redBright(
+            `| 몬스터 정보 |
+                이름: ${monster._name}
+                타입: ${monster._type}
+                공격력: ${monster._ATK}
+                방어력: ${monster._DEF}`,
+        ),
+    );
+    console.log(chalk.magentaBright(`=====================\n`));
+}
+
+const battle = async (stage, player, monster) => {
+    let logs = [];
+
+    while (player.hp > 0) {
+        //console.clear();
+        displayStatus(stage, player, monster);
+
+        logs.forEach((log) => console.log(log));
+
+        console.log(
+            chalk.green(
+                `\n1. 공격한다 2. 아무것도 하지않는다.`,
+            ),
+        );
+        const choice = readlineSync.question('당신의 선택은? ');
+
+        // 플레이어의 선택에 따라 다음 행동 처리
+        logs.push(chalk.green(`${choice}를 선택하셨습니다.`));
+        if (choice == 1) {
+            bulbasaur.checkHeathPoint(pikachu.attack());
+            pikachu.checkHeathPoint(bulbasaur.attack());
+        }
+        else if (choice == 2) {
+            bulbasaur.checkHeathPoint(0);
+            pikachu.checkHeathPoint(bulbasaur.attack());
+        }
+    }
+
+};
+
+export async function startGame() {
+    console.clear();
+    const player = pikachu;
+    let stage = 1;
+
+    while (stage <= 10) {
+        const monster = bulbasaur;
+        //console.log(player, monster);
+        await battle(stage, player, monster);
+
+        // 스테이지 클리어 및 게임 종료 조건
+        if (player.HP <= 0) {
+            console.log("게임 오버");
+            break;
+        }
+        console.log(stage, player);
+        stage++;
+    }
+    console.log("게임 끝.");
+}
