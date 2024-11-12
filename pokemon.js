@@ -3,12 +3,13 @@ import readlineSync from 'readline-sync';
 const typeOfPoke = ["불꽃", "풀", "물", "전기", "노말", "격투", "고스트", "에스퍼", "땅", "바위", "강철", "비행", "벌레", "얼음", "독", "악", "드래곤", "페어리"];
 
 class Pokemon {
-    constructor(name, type, HP, ATK, DEF) {
+    constructor(name, type, HP, ATK, DEF, tech) {
         this._name = name;
         this._type = type;
         this._HP = HP;
         this._ATK = ATK;
         this._DEF = DEF;
+        this._tech = tech;
     }
 
     get name() {
@@ -109,13 +110,25 @@ class Pokemon {
     // }
 
     //(데미지 = (위력 × 공격 × (레벨 × [[급소]] × 2 ÷ 5 + 2 ) ÷ 방어 ÷ 50 + 2 ) × [[자속 보정]] × 타입상성1 × 타입상성2 × 랜덤수/255)
-    attack(opponent) {
+    attack(power, opponent) {
         console.log(this._ATK, opponent._DEF);
-        return Math.floor((10 * this._ATK / opponent._DEF / 50 + 2) * (Math.random() * 38 + 179) * 10 / 255);
+        return Math.floor((power * this._ATK / opponent._DEF / 50 + 2) * (Math.random() * 38 + 179) * 10 / 255);
     }
 
     checkHeathPoint(gotDamage) {
         this._HP -= gotDamage;
+    }
+
+    checkFainted() {
+        if (this._HP <= 0) {
+            console.log(
+                chalk.green(
+                    `\n${this._name}은(는) 쓰러졌다!`,
+                ),
+            );
+            return true;
+        }
+        else return false;
     }
 }
 
@@ -171,37 +184,39 @@ const battle = async (stage, player, monster) => {
         // 플레이어의 선택에 따라 다음 행동 처리
         logs.push(chalk.green(`${choice}를 선택하셨습니다.`));
         if (choice == 1) {
-            damage = player.attack(monster);
+            damage = player.attack(10, monster);
             monster.checkHeathPoint(damage);
             console.log(
                 chalk.green(
-                    `\n야생의 ${monster._name}에게 ${damage}데미지!`,
+                    `\n${monster._name}에게 ${damage}데미지!`,
                 ),
             );
-            if (monster._HP <= 0) {
-                console.log(
-                    chalk.green(
-                        `\n야생의 ${monster._name}은(는) 쓰러졌다!`,
-                    ),
-                );
-                break;
-            }
-            damage = monster.attack(player);
 
-            player.checkHeathPoint(damage);
-            console.log(
-                chalk.green(
-                    `\n1. 공격한다 2. 아무것도 하지않는다.`,
-                ),
-            );
+
         }
         else if (choice == 2) {
-            damage = monster.attack(player);
-            monster.checkHeathPoint(0);
-            player.checkHeathPoint(damage);
-        }
-    }
+            console.log(
+                chalk.green(
+                    `\n기술을 선택해주세요.`,
+                ),
+            );
+            // switch() {
 
+            // }
+            monster.checkHeathPoint(0);
+        }
+
+        if (monster.checkFainted()) {
+            break;
+        }
+        damage = monster.attack(10, player);
+        player.checkHeathPoint(damage);
+        console.log(
+            chalk.green(
+                `\n${player._name}에게 ${damage}데미지!`,
+            ),
+        );
+    }
 };
 
 export async function startGame() {
@@ -209,25 +224,21 @@ export async function startGame() {
     const pikachu = new Pokemon("피카츄", "전기", 35, 55, 40);
     const bulbasaur = new Pokemon("이상해씨", "풀", 45, 49, 49);
     const player = pikachu;
+    const monster = bulbasaur;
+
+    monster._name = "야생의 " + monster._name;
     let stage = 1;
 
     while (stage <= 10) {
-        const monster = bulbasaur;
-        player._HP = 35;
-        monster._HP = 45;
+        player._HP = 350;
+        monster._HP = 450;
         //console.log(player, monster);
         await battle(stage, player, monster);
 
         // 스테이지 클리어 및 게임 종료 조건
-        if (player.HP <= 0) {
-            console.log(
-                chalk.green(
-                    `\n${player._name}은 쓰러졌다!`,
-                ),
-            );
+        if (player.checkFainted()) {
             break;
         }
-        console.log(stage, player);
         stage++;
     }
     console.log("게임 오버.");
