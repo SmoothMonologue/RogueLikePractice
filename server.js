@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import figlet from 'figlet';
 import readlineSync from 'readline-sync';
-import {startGame} from "./pokemon.js";
+import { startGame } from "./pokemon.js";
 
 // 로비 화면을 출력하는 함수
 function displayLobby() {
@@ -50,7 +50,7 @@ function handleUserInput() {
         case '1':
             console.log(chalk.green('게임을 시작합니다.'));
             // 여기에서 새로운 게임 시작 로직을 구현
-            startGame();
+            setTimeout(function () { startGame() }, 1000);
             break;
         case '2':
             console.log(chalk.yellow('구현 준비중입니다.. 게임을 시작하세요'));
