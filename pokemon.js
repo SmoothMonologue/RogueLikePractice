@@ -1,15 +1,17 @@
 import chalk from 'chalk';
 import readlineSync from 'readline-sync';
 const typeOfPoke = ["불꽃", "풀", "물", "전기", "노말", "격투", "고스트", "에스퍼", "땅", "바위", "강철", "비행", "벌레", "얼음", "독", "악", "드래곤", "페어리"];
+const moveOfPikachu = {};
+const statOfPokemons = [["피카츄", "전기", 35, 55, 40], ["이상해씨", "풀", 45, 49, 49]];
 
 class Pokemon {
-    constructor(name, type, HP, ATK, DEF, tech) {
-        this._name = name;
-        this._type = type;
-        this._HP = HP;
-        this._ATK = ATK;
-        this._DEF = DEF;
-        this._tech = tech;
+    constructor(statOfPoke) {
+        this._name = statOfPoke[0];
+        this._type = statOfPoke[1];
+        this._HP = statOfPoke[2];
+        this._ATK = statOfPoke[3];
+        this._DEF = statOfPoke[4];
+        this._move;
     }
 
     get name() {
@@ -199,17 +201,17 @@ const battle = async (stage, player, monster) => {
 
 export async function startGame() {
     console.clear();
-    const pikachu = new Pokemon("피카츄", "전기", 35, 55, 40);
-    const bulbasaur = new Pokemon("이상해씨", "풀", 45, 49, 49);
+    const pikachu = new Pokemon(statOfPokemons[0]);
+    //const bulbasaur = new Pokemon(statOfPokemons[1]);
     const player = pikachu;
-    const monster = bulbasaur;
+    //const monster = bulbasaur;
 
-    monster._name = "야생의 " + monster._name;
     let stage = 1;
 
     while (stage <= 10) {
+        let monster = new Pokemon(statOfPokemons[1]);
         player._HP = 35;
-        monster._HP = 45;
+        monster._name = "야생의 " + monster._name;
         //console.log(player, monster);
         await battle(stage, player, monster);
 
