@@ -1,17 +1,28 @@
 import chalk from 'chalk';
 import readlineSync from 'readline-sync';
+
 const typeOfPoke = ["없음", "불꽃", "풀", "물", "전기", "노말", "격투", "고스트", "에스퍼", "땅", "바위", "강철", "비행", "벌레", "얼음", "독", "악", "드래곤", "페어리"];
-const moveOfPikachu = {};
-const statOfPokemons = [["피카츄", "전기", "없음", 35, 55, 40], ["이상해씨", "풀", "독", 45, 49, 49]];
+//기술 저장 순서: 기술명, 배우는 레벨, 위력, 명중률, 사용 가능 횟수, 부가 효과, 부가 효과 부여 확률, 반동 여부
+const moveOfPokemons = {
+    "피카츄": [
+        { "기술명": "볼부비부비", "타입": typeOfPoke[4], "배우는레벨": 1, "위력": 20, "명중률": 90, "pp": 20, "부가효과": "마비", "확률": 90, "반동": "없음" },
+        { "기술명": "애교부리기", "타입": typeOfPoke[18], "배우는레벨": 2, "위력": 0, "명중률": 100, "pp": 20, "부가효과": "공격력 감소", "확률": 100, "반동": "없음" }
+    ]
+};
+//능력 저장 순서: 이름, 타입, 복합타입, 체력, 공격력, 방어력
+const statOfPokemons = [
+    { "이름": "피카츄", "타입": typeOfPoke[4], "복합타입": typeOfPoke[0], "체력": 35, "공격력": 55, "방어력": 40 },
+    { "이름": "이상해씨", "타입": typeOfPoke[2], "복합타입": typeOfPoke[15], "체력": 45, "공격력": 49, "방어력": 49 }
+];
 
 class Pokemon {
     constructor(statOfPoke) {
-        this._name = statOfPoke[0];
-        this._type = statOfPoke[1];
-        this._subtype = statOfPoke[2]
-        this._HP = statOfPoke[3] * 3;
-        this._ATK = statOfPoke[4];
-        this._DEF = statOfPoke[5];
+        this._name = statOfPoke.이름;
+        this._type = statOfPoke.타입;
+        this._subtype = statOfPoke.복합타입;
+        this._HP = statOfPoke.체력 * 3;
+        this._ATK = statOfPoke.공격력;
+        this._DEF = statOfPoke.방어력;
         this._move;
         this._level = 1;
     }
