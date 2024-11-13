@@ -1,17 +1,19 @@
 import chalk from 'chalk';
 import readlineSync from 'readline-sync';
-const typeOfPoke = ["불꽃", "풀", "물", "전기", "노말", "격투", "고스트", "에스퍼", "땅", "바위", "강철", "비행", "벌레", "얼음", "독", "악", "드래곤", "페어리"];
+const typeOfPoke = ["없음", "불꽃", "풀", "물", "전기", "노말", "격투", "고스트", "에스퍼", "땅", "바위", "강철", "비행", "벌레", "얼음", "독", "악", "드래곤", "페어리"];
 const moveOfPikachu = {};
-const statOfPokemons = [["피카츄", "전기", 35, 55, 40], ["이상해씨", "풀", 45, 49, 49]];
+const statOfPokemons = [["피카츄", "전기", "없음", 35, 55, 40], ["이상해씨", "풀", "독", 45, 49, 49]];
 
 class Pokemon {
     constructor(statOfPoke) {
         this._name = statOfPoke[0];
         this._type = statOfPoke[1];
-        this._HP = statOfPoke[2];
-        this._ATK = statOfPoke[3];
-        this._DEF = statOfPoke[4];
+        this._subtype = statOfPoke[2]
+        this._HP = statOfPoke[3] * 3;
+        this._ATK = statOfPoke[4];
+        this._DEF = statOfPoke[5];
         this._move;
+        this._level = 1;
     }
 
     get name() {
@@ -38,6 +40,20 @@ class Pokemon {
     }
 
     set type(value) {
+        typeOfPoke.forEach(chosenType => {
+            if (value == chosenType) {
+                this._type = value;
+                return;
+            }
+        });
+        console.log("타입 입력 오류.");
+    }
+
+    get subtype() {
+        return this._subtype;
+    }
+
+    set subtype(value) {
         typeOfPoke.forEach(chosenType => {
             if (value == chosenType) {
                 this._type = value;
@@ -144,12 +160,12 @@ function displayStatus(stage, player, monster) {
         chalk.cyanBright(`| Stage: ${stage} |
             `) +
         chalk.blueBright(
-            `| 플레이어 정보 |  이름: ${player._name}   타입: ${player._type}
+            `| 플레이어 정보 |  이름: ${player._name}   타입: ${player._type}, ${player._subtype}
             체력: ${player._HP} 공격력: ${player._ATK}  방어력: ${player._DEF}
             `,
         ) +
         chalk.redBright(
-            `| 몬스터 정보 |    이름: ${monster._name}  타입: ${monster._type}
+            `| 몬스터 정보 |    이름: ${monster._name}  타입: ${monster._type}, ${monster._subtype}
             체력: ${monster._HP}    공격력: ${monster._ATK} 방어력: ${monster._DEF}`,
         ),
     );
@@ -210,9 +226,8 @@ export async function startGame() {
 
     while (stage <= 10) {
         let monster = new Pokemon(statOfPokemons[1]);
-        player._HP = 35;
+        player._HP = 35 * 3;
         monster._name = "야생의 " + monster._name;
-        //console.log(player, monster);
         await battle(stage, player, monster);
 
         // 스테이지 클리어 및 게임 종료 조건
