@@ -1,5 +1,9 @@
 import chalk from 'chalk';
 import readlineSync from 'readline-sync';
+import { LowSync } from 'lowdb';
+import { JSONFileSync } from 'lowdb/node';
+
+const db = new LowSync(new JSONFileSync('db.json'), {});
 
 const typeOfPoke = [
   '없음',
@@ -77,7 +81,7 @@ class Pokemon {
     this._HP = statOfPoke.체력 * 3;
     this._ATK = statOfPoke.공격력;
     this._DEF = statOfPoke.방어력;
-    this._move[4];
+    this._move = ['', '', '', ''];
     this._level = 1;
   }
 
@@ -188,7 +192,16 @@ class Pokemon {
   // }
 
   learn() {
-    this._move[0] = moveOfPokemons._name;
+    this._move[0] = moveOfPokemons[this._name][0];
+    console.log(this._move, moveOfPokemons[this._name][0]);
+  }
+
+  isMoveEmpty(index) {
+    return this._move[index]['기술명'] != undefined ? this._move[index]['기술명'] : '-';
+  }
+
+  levelUp() {
+    this._level++;
   }
   //(데미지 = (위력 × 공격 × (레벨 × [[급소]] × 2 ÷ 5 + 2 ) ÷ 방어 ÷ 50 + 2 ) × [[자속 보정]] × 타입상성1 × 타입상성2 × 랜덤수/255)
   attack(power, opponent) {
@@ -218,11 +231,16 @@ function displayStatus(stage, player, monster) {
       chalk.blueBright(
         `| 플레이어 정보 |  이름: ${player._name}   타입: ${player._type}, ${player._subtype}
             체력: ${player._HP} 공격력: ${player._ATK}  방어력: ${player._DEF}
+            기술: ${player.isMoveEmpty(0)}  ${player.isMoveEmpty(1)}
+                  ${player.isMoveEmpty(2)}  ${player.isMoveEmpty(3)}
             `,
       ) +
       chalk.redBright(
         `| 몬스터 정보 |    이름: ${monster._name}  타입: ${monster._type}, ${monster._subtype}
-            체력: ${monster._HP}    공격력: ${monster._ATK} 방어력: ${monster._DEF}`,
+            체력: ${monster._HP}    공격력: ${monster._ATK} 방어력: ${monster._DEF}
+            기술: ${monster.isMoveEmpty(0)}  ${player.isMoveEmpty(1)}
+                  ${player.isMoveEmpty(2)}   ${player.isMoveEmpty(3)}
+            `,
       ),
   );
   console.log(chalk.magentaBright(`=====================\n`));
@@ -264,12 +282,14 @@ const battle = async (stage, player, monster) => {
 
 export async function startGame() {
   console.clear();
-  const pikachu = new Pokemon(statOfPokemons[0]);
+  //   db.read();
+  //console.log(db.data);
+  const player = new Pokemon(statOfPokemons[0]);
   //const bulbasaur = new Pokemon(statOfPokemons[1]);
-  const player = pikachu;
   //const monster = bulbasaur;
 
   let stage = 1;
+  player.learn();
 
   while (stage <= 10) {
     let monster = new Pokemon(statOfPokemons[1]);
