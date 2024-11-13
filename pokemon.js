@@ -193,7 +193,7 @@ class Pokemon {
 
   learn() {
     this._move[0] = moveOfPokemons[this._name][0];
-    console.log(this._move, moveOfPokemons[this._name][0]);
+    //console.log(this._move, moveOfPokemons[this._name][0]);
   }
 
   isMoveEmpty(index) {
@@ -212,7 +212,7 @@ class Pokemon {
 
   afterGotDamage(gotDamage) {
     this._HP -= gotDamage;
-    console.log(chalk.green(`\n${this._name}에게 ${gotDamage}데미지!`));
+    //console.log(chalk.green(`\n${this._name}에게 ${gotDamage}데미지!`));
   }
 
   checkFainted() {
@@ -229,17 +229,19 @@ function displayStatus(stage, player, monster) {
     chalk.cyanBright(`| Stage: ${stage} |
             `) +
       chalk.blueBright(
-        `| 플레이어 정보 |  이름: ${player._name}   타입: ${player._type}, ${player._subtype}
-            체력: ${player._HP} 공격력: ${player._ATK}  방어력: ${player._DEF}
-            기술: ${player.isMoveEmpty(0)}  ${player.isMoveEmpty(1)}
-                  ${player.isMoveEmpty(2)}  ${player.isMoveEmpty(3)}
+        `| 플레이어 정보 | 
+        이름: ${player._name}   타입: ${player._type}, ${player._subtype}
+        체력: ${player._HP} 공격력: ${player._ATK}  방어력: ${player._DEF}
+        기술: ${player.isMoveEmpty(0)}  ${player.isMoveEmpty(1)}
+            ${player.isMoveEmpty(2)}  ${player.isMoveEmpty(3)}
             `,
       ) +
       chalk.redBright(
-        `| 몬스터 정보 |    이름: ${monster._name}  타입: ${monster._type}, ${monster._subtype}
-            체력: ${monster._HP}    공격력: ${monster._ATK} 방어력: ${monster._DEF}
-            기술: ${monster.isMoveEmpty(0)}  ${player.isMoveEmpty(1)}
-                  ${player.isMoveEmpty(2)}   ${player.isMoveEmpty(3)}
+        `| 몬스터 정보 |
+        이름: ${monster._name}  타입: ${monster._type}, ${monster._subtype}
+        체력: ${monster._HP}    공격력: ${monster._ATK} 방어력: ${monster._DEF}
+        기술: ${monster.isMoveEmpty(0)}  ${player.isMoveEmpty(1)}
+            ${player.isMoveEmpty(2)}   ${player.isMoveEmpty(3)}
             `,
       ),
   );
@@ -250,7 +252,7 @@ const battle = async (stage, player, monster) => {
   let logs = [];
 
   while (player._HP > 0) {
-    //console.clear();
+    console.clear();
     displayStatus(stage, player, monster);
     let damage = 0;
 
@@ -271,17 +273,20 @@ const battle = async (stage, player, monster) => {
       // }
       monster.afterGotDamage(0);
     }
+    logs.push(chalk.green(`${monster._name}에게 ${damage}데미지!`));
 
     if (monster.checkFainted()) {
       break;
     }
     damage = monster.attack(10, player);
-    player.checkHeathPoint(damage);
+    player.afterGotDamage(damage);
+    logs.push(chalk.green(`${player._name}에게 ${damage}데미지!\n`));
   }
 };
 
 export async function startGame() {
-  console.clear();
+  //console.clear();
+
   //   db.read();
   //console.log(db.data);
   const player = new Pokemon(statOfPokemons[0]);
