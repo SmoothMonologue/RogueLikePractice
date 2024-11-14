@@ -261,12 +261,20 @@ class Pokemon {
     }
   }
   //(데미지 = (위력 × 공격 × (레벨 × [[급소]] × 2 ÷ 5 + 2 ) ÷ 방어 ÷ 50 + 2 ) × [[자속 보정]] × 타입상성1 × 타입상성2 × 랜덤수/255)
-  attack(power, typeOfMove, opponent) {
+  attack(power, typeOfMove, opponent, battleLogs) {
     if (power == 0) return 0;
-    let typeValue = this._type == typeOfMove || this._subtype == typeOfMove ? 1.1 : 1;
-    typeValue *= this.checkWeakness(typeOfMove, opponent._type);
-    typeValue *= this.checkWeakness(typeOfMove, opponent._subtype);
-
+    let isSameType = this._type == typeOfMove || this._subtype == typeOfMove ? 1.1 : 1;
+    let typeValue =
+      this.checkWeakness(typeOfMove, opponent._type) *
+      this.checkWeakness(typeOfMove, opponent._subtype);
+    if (typeValue == 0) {
+      battleLogs.push(chalk.green(`효과가 없는 것 같다...`));
+    } else if (typeValue > 1) {
+      battleLogs.push(chalk.green(`효과가 굉장했다!`));
+    } else if (typeValue < 1) {
+      battleLogs.push(chalk.green(`효과가 별로인 듯하다...`));
+    }
+    typeValue *= isSameType;
     return Math.floor(
       (((power * this._ATK) / opponent._DEF / 50 + 2) *
         typeValue *
@@ -324,29 +332,46 @@ const battle = async (stage, player, monster) => {
 
     logs.forEach((log) => console.log(log));
 
-    console.log(chalk.green(`\n1. 공격한다 2. 아무것도 하지않는다.`));
+    console.log(chalk.green(`\n1. 일반 공격을 한다 2. 기술을 사용한다.`));
     const choice = readlineSync.question('당신의 선택은? ');
 
     // 플레이어의 선택에 따라 다음 행동 처리
-    logs.push(chalk.green(`${choice}를 선택하셨습니다.`));
+    console.log(chalk.green(`${choice}를 선택하셨습니다.`));
     if (choice == 1) {
-      damage = player.attack(10, monster);
-      monster.afterGotDamage(damage);
+      damage = player.attack(10, typeOfPoke[0], monster);
     } else if (choice == 2) {
       console.log(chalk.green(`\n기술을 선택해주세요.`));
-      // switch() {
+      const move = readlineSync.question('당신의 선택은? ');
 
-      // }
-      monster.afterGotDamage(0);
+      if (move in [1, 2, 3, 4]) {
+        //try {} catch
+        //빈칸을 눌렀을 경우 예외처리
+        damage = player.attack(
+          player._move[move - 1]['위력'],
+          player._move[move - 1]['타입'],
+          monster,
+          logs,
+        );
+        logs.push(
+          chalk.green(`${player._name}은(는) ${player._move[move - 1]['기술명']}을(를) 사용했다!`),
+        );
+      } else {
+        //다시 고르세요. 혹은 눌러도 반응 없음
+      }
+    } else {
+      console.log(chalk.green(`제대로 고르십시오.`));
+      continue;
     }
+    monster.afterGotDamage(damage);
     logs.push(chalk.green(`${monster._name}에게 ${damage}데미지!`));
-
+    //효과 굉장/별로
     if (monster.checkFainted()) {
       break;
     }
-    damage = monster.attack(10, player);
+    damage = monster.attack(10, typeOfPoke[0], player, logs);
     player.afterGotDamage(damage);
     logs.push(chalk.green(`${player._name}에게 ${damage}데미지!\n`));
+    //효과 괴장/별로
   }
 };
 
@@ -369,7 +394,7 @@ export async function startGame() {
     // }
     monster.encount(stage);
     player._HP = 35 * 3;
-    monster._HP = 30;
+    monster._HP = 70;
 
     monster._name = '야생의 ' + monster._name;
     await battle(stage, player, monster);
