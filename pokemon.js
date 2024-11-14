@@ -159,112 +159,6 @@ class Pokemon {
     this._level = 1;
   }
 
-  // get name() {
-  //   return this._name;
-  // }
-
-  // set name(value) {
-  //   if (value.length <= 0) {
-  //     console.log('이름이 입력되지 않았습니다.');
-  //     return;
-  //   } else if (typeof value != 'string') {
-  //     console.log('입력된 포켓몬이 문자열이 아닙니다.');
-  //     return;
-  //   } else if (value.length > 6) {
-  //     console.log('포켓몬의 이름은 최대 6자입니다.');
-  //   }
-  //   this._name = value;
-  // }
-
-  // get type() {
-  //   return this._type;
-  // }
-
-  // set type(value) {
-  //   typeOfPoke.forEach((chosenType) => {
-  //     if (value == chosenType) {
-  //       this._type = value;
-  //       return;
-  //     }
-  //   });
-  //   console.log('타입 입력 오류.');
-  // }
-
-  // get subtype() {
-  //   return this._subtype;
-  // }
-
-  // set subtype(value) {
-  //   typeOfPoke.forEach((chosenType) => {
-  //     if (value == chosenType) {
-  //       this._type = value;
-  //       return;
-  //     }
-  //   });
-  //   console.log('타입 입력 오류.');
-  // }
-
-  // get HP() {
-  //   return this._HP;
-  // }
-
-  // set HP(value) {
-  //   if (value.length <= 0) {
-  //     console.log('체력이 입력되지 않았습니다.');
-  //     return;
-  //   } else if (typeof value != 'number') {
-  //     console.log('입력된 체력이 수가 아닙니다.');
-  //     return;
-  //   }
-  //   this._HP = value;
-  // }
-
-  // get ATK() {
-  //   return this._ATK;
-  // }
-
-  // set ATK(value) {
-  //   if (value.length <= 0) {
-  //     console.log('공격력이 입력되지 않았습니다.');
-  //     return;
-  //   } else if (typeof value != 'number') {
-  //     console.log('입력된 공격력이 수가 아닙니다.');
-  //     return;
-  //   }
-  //   this._ATK = value;
-  // }
-
-  // get DEF() {
-  //   return this._DEF;
-  // }
-
-  // set DEF(value) {
-  //   if (value.length <= 0) {
-  //     console.log('방어력이 입력되지 않았습니다.');
-  //     return;
-  //   } else if (typeof value != 'number') {
-  //     console.log('입력된 방어력이 수가 아닙니다.');
-  //     return;
-  //   }
-  //   this._DEF = value;
-  // }
-
-  // get SPD() {
-  //     return this._SPD;
-  // }
-
-  // set SPD(value) {
-  //     if (value.length <= 0) {
-  //         console.log("스피드가 입력되지 않았습니다.");
-  //         return;
-  //     }
-  //     else if (typeof value != "number") {
-  //         console.log("입력된 스피드가 수가 아닙니다.");
-  //         return;
-  //     }
-  //     this._SPD = value;
-  // }
-
   learn(level) {
     moveOfPokemons[this._no].forEach((moveInfo) => {
       if (moveInfo['배우는레벨'] == level) {
@@ -307,12 +201,78 @@ class Pokemon {
   levelUp() {
     this._level++;
   }
+  checkWeakness(atkType, defType) {
+    let win = 2,
+      lose = 0.5,
+      draw = 1,
+      invalid = 0;
+    if (atkType == typeOfPoke[0] || defType == typeOfPoke[0]) return draw;
+    switch (atkType) {
+      //불꽃타입 상성
+      case typeOfPoke[1]: {
+        if (
+          defType == typeOfPoke[2] ||
+          defType == typeOfPoke[11] ||
+          defType == typeOfPoke[13] ||
+          defType == typeOfPoke[14]
+        )
+          return win;
+        else if (
+          defType == typeOfPoke[1] ||
+          defType == typeOfPoke[3] ||
+          defType == typeOfPoke[10] ||
+          defType == typeOfPoke[17]
+        )
+          return lose;
+      }
+
+      //풀타입 상성
+      case typeOfPoke[2]: {
+        if (defType == typeOfPoke[3] || defType == typeOfPoke[9] || defType == typeOfPoke[10])
+          return win;
+        else if (
+          defType == typeOfPoke[1] ||
+          defType == typeOfPoke[2] ||
+          defType == typeOfPoke[11] ||
+          defType == typeOfPoke[12] ||
+          defType == typeOfPoke[13] ||
+          defType == typeOfPoke[15] ||
+          defType == typeOfPoke[17]
+        )
+          return lose;
+      }
+
+      //전기 타입 상성
+      case typeOfPoke[4]: {
+        if (defType == typeOfPoke[9]) return invalid;
+        else if (defType == typeOfPoke[3] || defType == typeOfPoke[12]) return win;
+        else if (defType == typeOfPoke[2] || defType == typeOfPoke[4] || defType == typeOfPoke[17])
+          return lose;
+      }
+
+      //노말 타입 상성
+      case typeOfPoke[5]: {
+        if (defType == typeOfPoke[7]) return invalid;
+        else if (defType == typeOfPoke[10] || defType == typeOfPoke[11]) return lose;
+      }
+
+      default:
+        return draw;
+    }
+  }
   //(데미지 = (위력 × 공격 × (레벨 × [[급소]] × 2 ÷ 5 + 2 ) ÷ 방어 ÷ 50 + 2 ) × [[자속 보정]] × 타입상성1 × 타입상성2 × 랜덤수/255)
-  attack(power, opponent) {
+  attack(power, typeOfMove, opponent) {
     if (power == 0) return 0;
+    let typeValue = this._type == typeOfMove || this._subtype == typeOfMove ? 1.1 : 1;
+    typeValue *= this.checkWeakness(typeOfMove, opponent._type);
+    typeValue *= this.checkWeakness(typeOfMove, opponent._subtype);
 
     return Math.floor(
-      (((power * this._ATK) / opponent._DEF / 50 + 2) * (Math.random() * 38 + 179) * 10) / 255,
+      (((power * this._ATK) / opponent._DEF / 50 + 2) *
+        typeValue *
+        (Math.random() * 38 + 179) *
+        10) /
+        255,
     );
   }
 
