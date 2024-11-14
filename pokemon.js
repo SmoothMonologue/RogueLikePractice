@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import readlineSync from 'readline-sync';
 import { LowSync } from 'lowdb';
 import { JSONFileSync } from 'lowdb/node';
+//import { db } from './db.js';
 
 const db = new LowSync(new JSONFileSync('db.json'), {});
 
@@ -28,7 +29,7 @@ const typeOfPoke = [
 ];
 //기술 저장 순서: 기술명, 배우는 레벨, 위력, 명중률, 사용 가능 횟수, 부가 효과, 부가 효과 부여 확률, 반동 여부
 const moveOfPokemons = {
-  피카츄: [
+  p25: [
     {
       기술명: '볼부비부비',
       타입: typeOfPoke[4],
@@ -51,11 +52,80 @@ const moveOfPokemons = {
       확률: 100,
       반동: '없음',
     },
+    {
+      기술명: '전기쇼크',
+      타입: typeOfPoke[4],
+      배우는레벨: 3,
+      위력: 40,
+      명중률: 90,
+      pp: 30,
+      부가효과: '마비',
+      확률: 20,
+      반동: '없음',
+    },
+    {
+      기술명: '10만볼트',
+      타입: typeOfPoke[4],
+      배우는레벨: 9,
+      위력: 90,
+      명중률: 90,
+      pp: 15,
+      부가효과: '마비',
+      확률: 20,
+      반동: '없음',
+    },
+  ],
+  p1: [
+    {
+      기술명: '몸통박치기',
+      타입: typeOfPoke[5],
+      배우는레벨: 1,
+      위력: 40,
+      명중률: 90,
+      pp: 35,
+      부가효과: '없음',
+      확률: 100,
+      반동: '없음',
+    },
+    {
+      기술명: '덩굴채찍',
+      타입: typeOfPoke[2],
+      배우는레벨: 3,
+      위력: 45,
+      명중률: 90,
+      pp: 25,
+      부가효과: '없음',
+      확률: 100,
+      반동: '없음',
+    },
+    {
+      기술명: '독가루',
+      타입: typeOfPoke[15],
+      배우는레벨: 5,
+      위력: 0,
+      명중률: 65,
+      pp: 35,
+      부가효과: '독',
+      확률: 100,
+      반동: '없음',
+    },
+    {
+      기술명: '잎날가르기',
+      타입: typeOfPoke[2],
+      배우는레벨: 9,
+      위력: 55,
+      명중률: 85,
+      pp: 25,
+      부가효과: '급소에맞음',
+      확률: 50,
+      반동: '없음',
+    },
   ],
 };
 //능력 저장 순서: 이름, 타입, 복합타입, 체력, 공격력, 방어력
 const statOfPokemons = [
   {
+    도감번호: 'p25',
     이름: '피카츄',
     타입: typeOfPoke[4],
     복합타입: typeOfPoke[0],
@@ -64,6 +134,7 @@ const statOfPokemons = [
     방어력: 40,
   },
   {
+    도감번호: 'p1',
     이름: '이상해씨',
     타입: typeOfPoke[2],
     복합타입: typeOfPoke[15],
@@ -75,6 +146,7 @@ const statOfPokemons = [
 
 class Pokemon {
   constructor(statOfPoke) {
+    this._no = statOfPoke.도감번호;
     this._name = statOfPoke.이름;
     this._type = statOfPoke.타입;
     this._subtype = statOfPoke.복합타입;
@@ -82,98 +154,99 @@ class Pokemon {
     this._ATK = statOfPoke.공격력;
     this._DEF = statOfPoke.방어력;
     this._move = ['', '', '', ''];
+    this._learnable = [];
     this._level = 1;
   }
 
-  get name() {
-    return this._name;
-  }
+  // get name() {
+  //   return this._name;
+  // }
 
-  set name(value) {
-    if (value.length <= 0) {
-      console.log('이름이 입력되지 않았습니다.');
-      return;
-    } else if (typeof value != 'string') {
-      console.log('입력된 포켓몬이 문자열이 아닙니다.');
-      return;
-    } else if (value.length > 6) {
-      console.log('포켓몬의 이름은 최대 6자입니다.');
-    }
-    this._name = value;
-  }
+  // set name(value) {
+  //   if (value.length <= 0) {
+  //     console.log('이름이 입력되지 않았습니다.');
+  //     return;
+  //   } else if (typeof value != 'string') {
+  //     console.log('입력된 포켓몬이 문자열이 아닙니다.');
+  //     return;
+  //   } else if (value.length > 6) {
+  //     console.log('포켓몬의 이름은 최대 6자입니다.');
+  //   }
+  //   this._name = value;
+  // }
 
-  get type() {
-    return this._type;
-  }
+  // get type() {
+  //   return this._type;
+  // }
 
-  set type(value) {
-    typeOfPoke.forEach((chosenType) => {
-      if (value == chosenType) {
-        this._type = value;
-        return;
-      }
-    });
-    console.log('타입 입력 오류.');
-  }
+  // set type(value) {
+  //   typeOfPoke.forEach((chosenType) => {
+  //     if (value == chosenType) {
+  //       this._type = value;
+  //       return;
+  //     }
+  //   });
+  //   console.log('타입 입력 오류.');
+  // }
 
-  get subtype() {
-    return this._subtype;
-  }
+  // get subtype() {
+  //   return this._subtype;
+  // }
 
-  set subtype(value) {
-    typeOfPoke.forEach((chosenType) => {
-      if (value == chosenType) {
-        this._type = value;
-        return;
-      }
-    });
-    console.log('타입 입력 오류.');
-  }
+  // set subtype(value) {
+  //   typeOfPoke.forEach((chosenType) => {
+  //     if (value == chosenType) {
+  //       this._type = value;
+  //       return;
+  //     }
+  //   });
+  //   console.log('타입 입력 오류.');
+  // }
 
-  get HP() {
-    return this._HP;
-  }
+  // get HP() {
+  //   return this._HP;
+  // }
 
-  set HP(value) {
-    if (value.length <= 0) {
-      console.log('체력이 입력되지 않았습니다.');
-      return;
-    } else if (typeof value != 'number') {
-      console.log('입력된 체력이 수가 아닙니다.');
-      return;
-    }
-    this._HP = value;
-  }
+  // set HP(value) {
+  //   if (value.length <= 0) {
+  //     console.log('체력이 입력되지 않았습니다.');
+  //     return;
+  //   } else if (typeof value != 'number') {
+  //     console.log('입력된 체력이 수가 아닙니다.');
+  //     return;
+  //   }
+  //   this._HP = value;
+  // }
 
-  get ATK() {
-    return this._ATK;
-  }
+  // get ATK() {
+  //   return this._ATK;
+  // }
 
-  set ATK(value) {
-    if (value.length <= 0) {
-      console.log('공격력이 입력되지 않았습니다.');
-      return;
-    } else if (typeof value != 'number') {
-      console.log('입력된 공격력이 수가 아닙니다.');
-      return;
-    }
-    this._ATK = value;
-  }
+  // set ATK(value) {
+  //   if (value.length <= 0) {
+  //     console.log('공격력이 입력되지 않았습니다.');
+  //     return;
+  //   } else if (typeof value != 'number') {
+  //     console.log('입력된 공격력이 수가 아닙니다.');
+  //     return;
+  //   }
+  //   this._ATK = value;
+  // }
 
-  get DEF() {
-    return this._DEF;
-  }
+  // get DEF() {
+  //   return this._DEF;
+  // }
 
-  set DEF(value) {
-    if (value.length <= 0) {
-      console.log('방어력이 입력되지 않았습니다.');
-      return;
-    } else if (typeof value != 'number') {
-      console.log('입력된 방어력이 수가 아닙니다.');
-      return;
-    }
-    this._DEF = value;
-  }
+  // set DEF(value) {
+  //   if (value.length <= 0) {
+  //     console.log('방어력이 입력되지 않았습니다.');
+  //     return;
+  //   } else if (typeof value != 'number') {
+  //     console.log('입력된 방어력이 수가 아닙니다.');
+  //     return;
+  //   }
+  //   this._DEF = value;
+  // }
 
   // get SPD() {
   //     return this._SPD;
@@ -191,8 +264,41 @@ class Pokemon {
   //     this._SPD = value;
   // }
 
-  learn() {
-    this._move[0] = moveOfPokemons[this._name][0];
+  learn(level) {
+    //     for (let i=0; i<moveOfPokemons[this._name].length; i++) {
+    //       if (moveOfPokemons[this._name][i]['배우는레벨']==level) {
+    // learnable[i]=moveOfPokemons[this._name][j];
+    //       }
+    //     }
+
+    moveOfPokemons[this._no].forEach((moveInfo) => {
+      if (moveInfo['배우는레벨'] == level) {
+        this._learnable.push(moveInfo);
+      }
+    });
+
+    for (let i = 0; i < 4; i++) {
+      if (this._move[i] == '' && this._learnable[i] != undefined) {
+        //console.log(learnable[i]);
+        this._move[i] = this._learnable[i];
+        //this._move[i] = learnable.pop();
+      }
+    }
+    //console.log(this._move, learnable);
+
+    // for (let i = 0; i < 4; i++) {
+    //   if (this._move[i] == '') {
+    //     for (let j = 0; j < moveOfPokemons[this._name].length; j++) {
+    //       if (moveOfPokemons[this._name][j]['배우는레벨'] == level) {
+    //         this._move[i] = moveOfPokemons[this._name][j];
+    //         console.log(this._name, this._move[i], moveOfPokemons[this._name][j]);
+    //         return;
+    //       }
+    //     }
+    //   }
+    // }
+    //이미 4칸 찼으면 기존 기술 중 하나를 골라 지우고 새 기술을 배울 수 있다.
+    //this._move[0] = moveOfPokemons[this._name][0];
     //console.log(this._move, moveOfPokemons[this._name][0]);
   }
 
@@ -205,6 +311,8 @@ class Pokemon {
   }
   //(데미지 = (위력 × 공격 × (레벨 × [[급소]] × 2 ÷ 5 + 2 ) ÷ 방어 ÷ 50 + 2 ) × [[자속 보정]] × 타입상성1 × 타입상성2 × 랜덤수/255)
   attack(power, opponent) {
+    if (power == 0) return 0;
+
     return Math.floor(
       (((power * this._ATK) / opponent._DEF / 50 + 2) * (Math.random() * 38 + 179) * 10) / 255,
     );
@@ -240,8 +348,8 @@ function displayStatus(stage, player, monster) {
         `| 몬스터 정보 |
         이름: ${monster._name}  타입: ${monster._type}, ${monster._subtype}
         체력: ${monster._HP}    공격력: ${monster._ATK} 방어력: ${monster._DEF}
-        기술: ${monster.isMoveEmpty(0)}  ${player.isMoveEmpty(1)}
-            ${player.isMoveEmpty(2)}   ${player.isMoveEmpty(3)}
+        기술: ${monster.isMoveEmpty(0)}  ${monster.isMoveEmpty(1)}
+            ${monster.isMoveEmpty(2)}   ${monster.isMoveEmpty(3)}
             `,
       ),
   );
@@ -290,15 +398,21 @@ export async function startGame() {
   //   db.read();
   //console.log(db.data);
   const player = new Pokemon(statOfPokemons[0]);
-  //const bulbasaur = new Pokemon(statOfPokemons[1]);
-  //const monster = bulbasaur;
+  //const monster = new Pokemon(statOfPokemons[1]);
 
   let stage = 1;
-  player.learn();
+  //player.learn();
 
   while (stage <= 10) {
     let monster = new Pokemon(statOfPokemons[1]);
+    player.learn(stage);
+    // for (let i = 0; i < stage; i++) {
+    //   monster.learn(i);
+    // }
+    monster.learn(stage);
     player._HP = 35 * 3;
+    monster._HP = 30;
+
     monster._name = '야생의 ' + monster._name;
     await battle(stage, player, monster);
 
