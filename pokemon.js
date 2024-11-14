@@ -266,41 +266,38 @@ class Pokemon {
   // }
 
   learn(level) {
-    //     for (let i=0; i<moveOfPokemons[this._name].length; i++) {
-    //       if (moveOfPokemons[this._name][i]['배우는레벨']==level) {
-    // learnable[i]=moveOfPokemons[this._name][j];
-    //       }
-    //     }
-
     moveOfPokemons[this._no].forEach((moveInfo) => {
       if (moveInfo['배우는레벨'] == level) {
         this._learnable.push(moveInfo);
       }
     });
 
-    for (let i = 0; i < 4; i++) {
-      if (this._move[i] == '' && this._learnable[i] != undefined) {
-        //console.log(learnable[i]);
-        this._move[i] = this._learnable[i];
-        //this._move[i] = learnable.pop();
+    for (let i = 0; level < 4 ? i < level : i < 4; i++) {
+      if (this._learnable.length == 0) break;
+      if (this._move[i] == '' /*&& this._learnable[i] != undefined*/) {
+        //this._move[i] = this._learnable[i];
+        this._move[i] = this._learnable.pop();
       }
     }
-    //console.log(this._move, learnable);
-
-    // for (let i = 0; i < 4; i++) {
-    //   if (this._move[i] == '') {
-    //     for (let j = 0; j < moveOfPokemons[this._name].length; j++) {
-    //       if (moveOfPokemons[this._name][j]['배우는레벨'] == level) {
-    //         this._move[i] = moveOfPokemons[this._name][j];
-    //         console.log(this._name, this._move[i], moveOfPokemons[this._name][j]);
-    //         return;
-    //       }
-    //     }
-    //   }
-    // }
     //이미 4칸 찼으면 기존 기술 중 하나를 골라 지우고 새 기술을 배울 수 있다.
     //this._move[0] = moveOfPokemons[this._name][0];
     //console.log(this._move, moveOfPokemons[this._name][0]);
+  }
+
+  encount(level) {
+    moveOfPokemons[this._no].forEach((moveInfo) => {
+      if (moveInfo['배우는레벨'] <= level) {
+        this._learnable.push(moveInfo);
+      }
+    });
+
+    for (let i = 0; level < 4 ? i < level : i < 4; i++) {
+      if (this._learnable.length == 0) break;
+      if (this._move[i] == '' /*&& this._learnable[i] != undefined*/) {
+        //this._move[i] = this._learnable[i];
+        this._move[i] = this._learnable.pop();
+      }
+    }
   }
 
   isMoveEmpty(index) {
@@ -410,7 +407,7 @@ export async function startGame() {
     // for (let i = 0; i < stage; i++) {
     //   monster.learn(i);
     // }
-    monster.learn(stage);
+    monster.encount(stage);
     player._HP = 35 * 3;
     monster._HP = 30;
 
