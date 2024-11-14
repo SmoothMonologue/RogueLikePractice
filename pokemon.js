@@ -242,6 +242,14 @@ class Pokemon {
           return lose;
       }
 
+      //물타입 상성
+      case typeOfPoke[3]: {
+        if (defType == typeOfPoke[1] || defType == typeOfPoke[9] || defType == typeOfPoke[10])
+          return win;
+        else if (defType == typeOfPoke[2] || defType == typeOfPoke[3] || defType == typeOfPoke[17])
+          return lose;
+      }
+
       //전기 타입 상성
       case typeOfPoke[4]: {
         if (defType == typeOfPoke[9]) return invalid;
@@ -254,6 +262,27 @@ class Pokemon {
       case typeOfPoke[5]: {
         if (defType == typeOfPoke[7]) return invalid;
         else if (defType == typeOfPoke[10] || defType == typeOfPoke[11]) return lose;
+      }
+
+      //격투 타입 상성
+      case typeOfPoke[6]: {
+        if (defType == typeOfPoke[7]) return invalid;
+        else if (
+          defType == typeOfPoke[5] ||
+          defType == typeOfPoke[10] ||
+          defType == typeOfPoke[11] ||
+          defType == typeOfPoke[14] ||
+          defType == typeOfPoke[16]
+        )
+          return win;
+        else if (
+          defType == typeOfPoke[8] ||
+          defType == typeOfPoke[12] ||
+          defType == typeOfPoke[13] ||
+          defType == typeOfPoke[15] ||
+          defType == typeOfPoke[18]
+        )
+          return lose;
       }
 
       default:
