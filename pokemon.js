@@ -346,20 +346,27 @@ const battle = async (stage, player, monster) => {
       if (move in [1, 2, 3, 4]) {
         //try {} catch
         //빈칸을 눌렀을 경우 예외처리
-        damage = player.attack(
-          player._move[move - 1]['위력'],
-          player._move[move - 1]['타입'],
-          monster,
-          logs,
-        );
-        logs.push(
-          chalk.green(`${player._name}은(는) ${player._move[move - 1]['기술명']}을(를) 사용했다!`),
-        );
+        if (player._move[move - 1]['기술명'] == undefined) {
+          logs.push(chalk.green(`${player._name}은(는) 헛손질을 했다!`));
+        } else {
+          damage = player.attack(
+            player._move[move - 1]['위력'],
+            player._move[move - 1]['타입'],
+            monster,
+            logs,
+          );
+          logs.push(
+            chalk.green(
+              `${player._name}은(는) ${player._move[move - 1]['기술명']}을(를) 사용했다!`,
+            ),
+          );
+        }
       } else {
         //다시 고르세요. 혹은 눌러도 반응 없음
+        continue;
       }
     } else {
-      console.log(chalk.green(`제대로 고르십시오.`));
+      //console.log(chalk.green(`제대로 고르십시오.`));
       continue;
     }
     monster.afterGotDamage(damage);
