@@ -208,7 +208,7 @@ class Pokemon {
       invalid = 0;
     if (atkType == typeOfPoke[0] || defType == typeOfPoke[0]) return draw;
     switch (atkType) {
-      //불꽃타입 상성
+      //불꽃 타입 상성
       case typeOfPoke[1]: {
         if (
           defType == typeOfPoke[2] ||
@@ -226,7 +226,7 @@ class Pokemon {
           return lose;
       }
 
-      //풀타입 상성
+      //풀 타입 상성
       case typeOfPoke[2]: {
         if (defType == typeOfPoke[3] || defType == typeOfPoke[9] || defType == typeOfPoke[10])
           return win;
@@ -242,7 +242,7 @@ class Pokemon {
           return lose;
       }
 
-      //물타입 상성
+      //물 타입 상성
       case typeOfPoke[3]: {
         if (defType == typeOfPoke[1] || defType == typeOfPoke[9] || defType == typeOfPoke[10])
           return win;
@@ -282,6 +282,137 @@ class Pokemon {
           defType == typeOfPoke[15] ||
           defType == typeOfPoke[18]
         )
+          return lose;
+      }
+
+      //고스트 타입 상성
+      case typeOfPoke[7]: {
+        if (defType == typeOfPoke[5]) return invalid;
+        else if (defType == typeOfPoke[7] || defType == typeOfPoke[8]) return win;
+        else if (defType == typeOfPoke[16]) return lose;
+      }
+
+      //에스퍼 타입 상성
+      case typeOfPoke[8]: {
+        if (defType == typeOfPoke[16]) return invalid;
+        else if (defType == typeOfPoke[6] || defType == typeOfPoke[15]) return win;
+        else if (defType == typeOfPoke[8] || defType == typeOfPoke[11]) return lose;
+      }
+
+      //땅 타입 상성
+      case typeOfPoke[9]: {
+        if (defType == typeOfPoke[12]) return invalid;
+        else if (
+          defType == typeOfPoke[1] ||
+          defType == typeOfPoke[4] ||
+          defType == typeOfPoke[10] ||
+          defType == typeOfPoke[11] ||
+          defType == typeOfPoke[15]
+        )
+          return win;
+        else if (defType == typeOfPoke[2] || defType == typeOfPoke[13]) return lose;
+      }
+
+      //바위 타입 상성
+      case typeOfPoke[10]: {
+        if (
+          defType == typeOfPoke[1] ||
+          defType == typeOfPoke[12] ||
+          defType == typeOfPoke[13] ||
+          defType == typeOfPoke[14]
+        )
+          return win;
+        else if (defType == typeOfPoke[6] || defType == typeOfPoke[9] || defType == typeOfPoke[11])
+          return lose;
+      }
+
+      //강철 타입 상성
+      case typeOfPoke[11]: {
+        if (defType == typeOfPoke[10] || defType == typeOfPoke[14] || defType == typeOfPoke[18])
+          return win;
+        else if (
+          defType == typeOfPoke[1] ||
+          defType == typeOfPoke[3] ||
+          defType == typeOfPoke[4] ||
+          defType == typeOfPoke[11]
+        )
+          return lose;
+      }
+
+      //비행 타입 상성
+      case typeOfPoke[12]: {
+        if (defType == typeOfPoke[2] || defType == typeOfPoke[6] || defType == typeOfPoke[13])
+          return win;
+        else if (defType == typeOfPoke[4] || defType == typeOfPoke[10] || defType == typeOfPoke[11])
+          return lose;
+      }
+
+      //벌레 타입 상성
+      case typeOfPoke[13]: {
+        if (defType == typeOfPoke[2] || defType == typeOfPoke[8] || defType == typeOfPoke[16])
+          return win;
+        else if (
+          defType == typeOfPoke[1] ||
+          defType == typeOfPoke[6] ||
+          defType == typeOfPoke[7] ||
+          defType == typeOfPoke[11] ||
+          defType == typeOfPoke[12] ||
+          defType == typeOfPoke[15] ||
+          defType == typeOfPoke[18]
+        )
+          return lose;
+      }
+
+      //얼음 타입 상성
+      case typeOfPoke[14]: {
+        if (
+          defType == typeOfPoke[2] ||
+          defType == typeOfPoke[9] ||
+          defType == typeOfPoke[12] ||
+          defType == typeOfPoke[17]
+        )
+          return win;
+        else if (
+          defType == typeOfPoke[1] ||
+          defType == typeOfPoke[3] ||
+          defType == typeOfPoke[11] ||
+          defType == typeOfPoke[14]
+        )
+          return lose;
+      }
+
+      //독 타입 상성
+      case typeOfPoke[15]: {
+        if (defType == typeOfPoke[11]) return invalid;
+        else if (defType == typeOfPoke[2] || defType == typeOfPoke[18]) return win;
+        else if (
+          defType == typeOfPoke[7] ||
+          defType == typeOfPoke[9] ||
+          defType == typeOfPoke[10] ||
+          defType == typeOfPoke[15]
+        )
+          return lose;
+      }
+
+      //악 타입 상성
+      case typeOfPoke[16]: {
+        if (defType == typeOfPoke[7] || defType == typeOfPoke[8]) return win;
+        else if (defType == typeOfPoke[6] || defType == typeOfPoke[16] || defType == typeOfPoke[18])
+          return lose;
+      }
+
+      //드래곤 타입 상성
+      case typeOfPoke[17]: {
+        if (defType == typeOfPoke[18]) return invalid;
+        else if (defType == typeOfPoke[17]) return win;
+        else if (defType == typeOfPoke[11]) return lose;
+      }
+
+      //페어리 타입 상성
+      case typeOfPoke[18]: {
+        if (defType == typeOfPoke[6] || defType == typeOfPoke[16] || defType == typeOfPoke[17])
+          return win;
+        else if (defType == typeOfPoke[1] || defType == typeOfPoke[11] || defType == typeOfPoke[15])
           return lose;
       }
 
