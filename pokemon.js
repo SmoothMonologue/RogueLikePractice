@@ -364,14 +364,12 @@ const battle = async (stage, player, monster) => {
     }
     monster.afterGotDamage(damage);
     logs.push(chalk.green(`${monster._name}에게 ${damage}데미지!`));
-    //효과 굉장/별로
     if (monster.checkFainted()) {
       break;
     }
     damage = monster.attack(10, typeOfPoke[0], player, logs);
     player.afterGotDamage(damage);
     logs.push(chalk.green(`${player._name}에게 ${damage}데미지!\n`));
-    //효과 괴장/별로
   }
 };
 
