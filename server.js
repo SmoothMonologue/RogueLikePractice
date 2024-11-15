@@ -44,22 +44,15 @@ function displayLobby() {
 }
 
 // 유저 입력을 받아 처리하는 함수
-function handleUserInput() {
+async function handleUserInput() {
   const choice = readlineSync.question('입력: ');
 
   switch (choice) {
     case '1':
       console.log(chalk.green('게임을 시작합니다.'));
       // 여기에서 새로운 게임 시작 로직을 구현
-      readFirstPage();
-      readlineSync.question('아무 키나 누르면 시작.');
-      setTimeout(function () {
-        startGame();
-      }, 1000);
-      // setTimeout(function () {
-      //   readFirstPage();
-      //   console.log('Test');
-      // }, 2000);
+      await readFirstPage();
+      await startGame();
       break;
     case '2':
       console.log(chalk.yellow('구현 준비중입니다.. 게임을 시작하세요'));
