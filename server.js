@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import figlet from 'figlet';
 import readlineSync from 'readline-sync';
 import { startGame } from './pokemon.js';
+import { readFirstPage } from './tutorial.js';
 
 // 로비 화면을 출력하는 함수
 function displayLobby() {
@@ -31,7 +32,7 @@ function displayLobby() {
 
   // 옵션들
   console.log(chalk.blue('1.') + chalk.white(' 새로운 게임 시작'));
-  console.log(chalk.blue('2.') + chalk.white(' 업적 확인하기'));
+  console.log(chalk.blue('2.') + chalk.white(' 이어서 게임하기'));
   console.log(chalk.blue('3.') + chalk.white(' 옵션'));
   console.log(chalk.blue('4.') + chalk.white(' 종료'));
 
@@ -50,9 +51,15 @@ function handleUserInput() {
     case '1':
       console.log(chalk.green('게임을 시작합니다.'));
       // 여기에서 새로운 게임 시작 로직을 구현
+      readFirstPage();
+      readlineSync.question('아무 키나 누르면 시작.');
       setTimeout(function () {
         startGame();
       }, 1000);
+      // setTimeout(function () {
+      //   readFirstPage();
+      //   console.log('Test');
+      // }, 2000);
       break;
     case '2':
       console.log(chalk.yellow('구현 준비중입니다.. 게임을 시작하세요'));

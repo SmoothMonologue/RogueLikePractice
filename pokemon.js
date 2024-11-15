@@ -5,7 +5,6 @@ import { JSONFileSync } from 'lowdb/node';
 //import { db } from './db.js';
 
 const db = new LowSync(new JSONFileSync('db.json'), {});
-
 const typeOfPoke = [
   '없음',
   '불꽃',
@@ -157,6 +156,96 @@ class Pokemon {
     this._move = ['', '', '', ''];
     this._learnable = [];
     this._level = 1;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  set name(value) {
+    if (value.length <= 0) {
+      console.log('이름이 입력되지 않았습니다.');
+      return;
+    } else if (typeof value != 'string') {
+      console.log('입력된 포켓몬이 문자열이 아닙니다.');
+      return;
+    } else if (value.length > 6) {
+      console.log('포켓몬의 이름은 최대 6자입니다.');
+    }
+    this._name = value;
+  }
+
+  get type() {
+    return this._type;
+  }
+
+  set type(value) {
+    typeOfPoke.forEach((chosenType) => {
+      if (value == chosenType) {
+        this._type = value;
+        return;
+      }
+    });
+    console.log('타입 입력 오류.');
+  }
+
+  get subtype() {
+    return this._subtype;
+  }
+
+  set subtype(value) {
+    typeOfPoke.forEach((chosenType) => {
+      if (value == chosenType) {
+        this._type = value;
+        return;
+      }
+    });
+    console.log('타입 입력 오류.');
+  }
+
+  get HP() {
+    return this._HP;
+  }
+
+  set HP(value) {
+    if (value.length <= 0) {
+      console.log('체력이 입력되지 않았습니다.');
+      return;
+    } else if (typeof value != 'number') {
+      console.log('입력된 체력이 수가 아닙니다.');
+      return;
+    }
+    this._HP = value;
+  }
+
+  get ATK() {
+    return this._ATK;
+  }
+
+  set ATK(value) {
+    if (value.length <= 0) {
+      console.log('공격력이 입력되지 않았습니다.');
+      return;
+    } else if (typeof value != 'number') {
+      console.log('입력된 공격력이 수가 아닙니다.');
+      return;
+    }
+    this._ATK = value;
+  }
+
+  get DEF() {
+    return this._DEF;
+  }
+
+  set DEF(value) {
+    if (value.length <= 0) {
+      console.log('방어력이 입력되지 않았습니다.');
+      return;
+    } else if (typeof value != 'number') {
+      console.log('입력된 방어력이 수가 아닙니다.');
+      return;
+    }
+    this._DEF = value;
   }
 
   learn(level) {
@@ -541,7 +630,7 @@ const battle = async (stage, player, monster) => {
 };
 
 export async function startGame() {
-  //console.clear();
+  console.clear();
 
   //   db.read();
   //console.log(db.data);
