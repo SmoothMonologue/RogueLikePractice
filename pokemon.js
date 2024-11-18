@@ -760,7 +760,7 @@ export async function startGame() {
   //player.learn();
 
   while (stage <= 10) {
-    let monster = new Pokemon(statOfPokemons[1]);
+    let monster = new Pokemon(statOfPokemons[Math.floor(Math.random() * 5)]);
     player.learn(stage);
     // for (let i = 0; i < stage; i++) {
     //   monster.learn(i);

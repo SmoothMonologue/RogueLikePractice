@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import readlineSync from 'readline-sync';
 
 const nextScript = 1500;
-const choosePlayer = [
+const askToChoosePlayer = [
   `마라톤 시작부터 갑자기 넘어지고 말았다. 너라면 어떻게 하겠는가?
   1. 아직 포기하지 않아!
   2. 절망해서 주저앉는다.
@@ -70,10 +70,11 @@ export let readFirstPage = async function () {
   readlineSync.question(chalk.gray('아무 키나 누르면 시작.'));
   console.clear();
 
-  for (let i = 0; i < choosePlayer.length; i++) {
-    await questionPage(choosePlayer[i]);
-    //if(!questionPage())
-  }
+  // for (let i = 0; i < choosePlayer.length; i++) {
+  //   await questionPage(choosePlayer[i]);
+  //   //if(!questionPage())
+  // }
+  await questionPage();
   await firstPage('여러 질문에 대답해줘서 고맙다.');
   console.log(chalk.green(fulltext));
   await firstPage('너는 아무래도');
@@ -86,18 +87,25 @@ export let readFirstPage = async function () {
   console.log(chalk.green(fulltext));
   await firstPage('잘해보도록!');
   console.log(chalk.green(fulltext));
+  readlineSync.question(chalk.gray('아무 키나 누르면 시작.'));
 };
 
-let questionPage = async function (question) {
-  //let question = choosePlayer[3];
-  const choice = readlineSync.question(question);
-  //1부터 4까지만 받겠다고 했는데 0부터 3까지만 받는다.
-  //이유가 뭔지는 모르겠다. 스위치문을 쓰면 버그는 사라지긴 하겠다만.
-  if (choice in [1, 2, 3, 4]) {
-    playerPoint[choice]++;
-    console.clear();
-    //console.log(choice, playerPoint);
-  } else return false;
+let questionPage = async function () {
+  let count = 0;
+  while (count < askToChoosePlayer.length) {
+    const choice = readlineSync.question(askToChoosePlayer[count]);
+    //1부터 4까지만 받겠다고 했는데 0부터 3까지만 받는다.
+    //이유가 뭔지는 모르겠다. 스위치문을 쓰면 버그는 사라지긴 하겠다만.
+    if (choice in [1, 2, 3, 4]) {
+      playerPoint[choice]++;
+      console.clear();
+      //console.log(choice, playerPoint);
+    } else {
+      console.clear();
+      continue;
+    }
+    count++;
+  }
   // switch (choice) {
   //   case '1':
   //     break;
