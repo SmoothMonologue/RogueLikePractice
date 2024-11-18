@@ -265,6 +265,10 @@ class Pokemon {
     this._level = 1;
   }
 
+  get number() {
+    return this._no;
+  }
+
   get name() {
     return this._name;
   }
@@ -355,18 +359,26 @@ class Pokemon {
     this._DEF = value;
   }
 
+  get learnable() {
+    return this._learnable;
+  }
+
+  get move() {
+    return this._move;
+  }
+
   learn(level) {
-    moveOfPokemons[this._no].forEach((moveInfo) => {
+    moveOfPokemons[this.number].forEach((moveInfo) => {
       if (moveInfo['배우는레벨'] == level) {
-        this._learnable.push(moveInfo);
+        this.learnable.push(moveInfo);
       }
     });
 
     for (let i = 0; level < 4 ? i < level : i < 4; i++) {
-      if (this._learnable.length == 0) break;
-      if (this._move[i] == '' /*&& this._learnable[i] != undefined*/) {
+      if (this.learnable.length == 0) break;
+      if (this.move[i] == '' /*&& this._learnable[i] != undefined*/) {
         //this._move[i] = this._learnable[i];
-        this._move[i] = this._learnable.pop();
+        this.move[i] = this.learnable.pop();
       }
     }
     //이미 4칸 찼으면 기존 기술 중 하나를 골라 지우고 새 기술을 배울 수 있다.
@@ -375,23 +387,23 @@ class Pokemon {
   }
 
   encount(level) {
-    moveOfPokemons[this._no].forEach((moveInfo) => {
+    moveOfPokemons[this.number].forEach((moveInfo) => {
       if (moveInfo['배우는레벨'] <= level) {
-        this._learnable.push(moveInfo);
+        this.learnable.push(moveInfo);
       }
     });
 
     for (let i = 0; level < 4 ? i < level : i < 4; i++) {
-      if (this._learnable.length == 0) break;
-      if (this._move[i] == '' /*&& this._learnable[i] != undefined*/) {
+      if (this.learnable.length == 0) break;
+      if (this.move[i] == '' /*&& this._learnable[i] != undefined*/) {
         //this._move[i] = this._learnable[i];
-        this._move[i] = this._learnable.pop();
+        this.move[i] = this.learnable.pop();
       }
     }
   }
 
   isMoveEmpty(index) {
-    return this._move[index]['기술명'] != undefined ? this._move[index]['기술명'] : '-';
+    return this.move[index]['기술명'] != undefined ? this.move[index]['기술명'] : '-';
   }
 
   levelUp() {
@@ -619,7 +631,7 @@ class Pokemon {
   //(데미지 = (위력 × 공격 × (레벨 × [[급소]] × 2 ÷ 5 + 2 ) ÷ 방어 ÷ 50 + 2 ) × [[자속 보정]] × 타입상성1 × 타입상성2 × 랜덤수/255)
   attack(power, typeOfMove, opponent, battleLogs) {
     if (power == 0) return 0;
-    let isSameType = this._type == typeOfMove || this._subtype == typeOfMove ? 1.1 : 1;
+    let isSameType = this.type == typeOfMove || this.subtype == typeOfMove ? 1.1 : 1;
     let typeValue =
       this.checkWeakness(typeOfMove, opponent._type) *
       this.checkWeakness(typeOfMove, opponent._subtype);
@@ -632,7 +644,7 @@ class Pokemon {
     }
     typeValue *= isSameType;
     return Math.floor(
-      (((power * this._ATK) / opponent._DEF / 50 + 2) *
+      (((power * this.ATK) / opponent._DEF / 50 + 2) *
         typeValue *
         (Math.random() * 38 + 179) *
         10) /
@@ -641,13 +653,13 @@ class Pokemon {
   }
 
   afterGotDamage(gotDamage) {
-    this._HP -= gotDamage;
+    this.HP -= gotDamage;
     //console.log(chalk.green(`\n${this._name}에게 ${gotDamage}데미지!`));
   }
 
   checkFainted() {
-    if (this._HP <= 0) {
-      console.log(chalk.green(`\n${this._name}은(는) 쓰러졌다!`));
+    if (this.HP <= 0) {
+      console.log(chalk.green(`\n${this.name}은(는) 쓰러졌다!`));
       return true;
     } else return false;
   }
@@ -660,16 +672,16 @@ function displayStatus(stage, player, monster) {
             `) +
       chalk.blueBright(
         `| 플레이어 정보 | 
-        이름: ${player._name}   타입: ${player._type}, ${player._subtype}
-        체력: ${player._HP} 공격력: ${player._ATK}  방어력: ${player._DEF}
+        이름: ${player.name}   타입: ${player.type} ${player.subtype == typeOfPoke[0] ? ' ' : player.subtype}
+        체력: ${player.HP} 공격력: ${player.ATK}  방어력: ${player.DEF}
         기술: ${player.isMoveEmpty(0)}  ${player.isMoveEmpty(1)}
             ${player.isMoveEmpty(2)}  ${player.isMoveEmpty(3)}
             `,
       ) +
       chalk.redBright(
         `| 몬스터 정보 |
-        이름: ${monster._name}  타입: ${monster._type}, ${monster._subtype}
-        체력: ${monster._HP}    공격력: ${monster._ATK} 방어력: ${monster._DEF}
+        이름: ${monster.name}  타입: ${monster.type} ${monster.subtype == typeOfPoke[0] ? '' : monster.subtype}
+        체력: ${monster.HP}    공격력: ${monster.ATK} 방어력: ${monster.DEF}
         기술: ${monster.isMoveEmpty(0)}  ${monster.isMoveEmpty(1)}
             ${monster.isMoveEmpty(2)}   ${monster.isMoveEmpty(3)}
             `,
@@ -681,7 +693,7 @@ function displayStatus(stage, player, monster) {
 const battle = async (stage, player, monster) => {
   let logs = [];
 
-  while (player._HP > 0) {
+  while (player.HP > 0) {
     console.clear();
     displayStatus(stage, player, monster);
     let damage = 0;
@@ -699,22 +711,20 @@ const battle = async (stage, player, monster) => {
       console.log(chalk.green(`\n기술을 선택해주세요.`));
       const move = readlineSync.question('당신의 선택은? ');
 
-      if (move in [1, 2, 3, 4]) {
+      if (move in [1, 2, 3, 4, 5]) {
         //try {} catch
         //빈칸을 눌렀을 경우 예외처리
-        if (player._move[move - 1]['기술명'] == undefined) {
-          logs.push(chalk.green(`${player._name}은(는) 헛손질을 했다!`));
+        if (player.move[move - 1]['기술명'] == undefined) {
+          logs.push(chalk.green(`${player.name}은(는) 헛손질을 했다!`));
         } else {
           damage = player.attack(
-            player._move[move - 1]['위력'],
-            player._move[move - 1]['타입'],
+            player.move[move - 1]['위력'],
+            player.move[move - 1]['타입'],
             monster,
             logs,
           );
           logs.push(
-            chalk.green(
-              `${player._name}은(는) ${player._move[move - 1]['기술명']}을(를) 사용했다!`,
-            ),
+            chalk.green(`${player.name}은(는) ${player.move[move - 1]['기술명']}을(를) 사용했다!`),
           );
         }
       } else {
@@ -726,13 +736,13 @@ const battle = async (stage, player, monster) => {
       continue;
     }
     monster.afterGotDamage(damage);
-    logs.push(chalk.green(`${monster._name}에게 ${damage}데미지!`));
+    logs.push(chalk.green(`${monster.name}에게 ${damage}데미지!`));
     if (monster.checkFainted()) {
       break;
     }
     damage = monster.attack(10, typeOfPoke[0], player, logs);
     player.afterGotDamage(damage);
-    logs.push(chalk.green(`${player._name}에게 ${damage}데미지!\n`));
+    logs.push(chalk.green(`${player.name}에게 ${damage}데미지!\n`));
   }
 };
 
@@ -754,10 +764,10 @@ export async function startGame() {
     //   monster.learn(i);
     // }
     monster.encount(stage);
-    player._HP = 35 * 3;
-    monster._HP = 70;
+    player.HP = 35 * 3;
+    monster.HP = 70;
 
-    monster._name = '야생의 ' + monster._name;
+    monster.name = '야생의 ' + monster.name;
     await battle(stage, player, monster);
 
     // 스테이지 클리어 및 게임 종료 조건

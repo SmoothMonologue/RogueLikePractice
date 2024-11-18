@@ -51,7 +51,7 @@ async function handleUserInput() {
     case '1':
       console.log(chalk.green('게임을 시작합니다.'));
       // 여기에서 새로운 게임 시작 로직을 구현
-      await readFirstPage();
+      //await readFirstPage();
       await startGame();
       break;
     case '2':

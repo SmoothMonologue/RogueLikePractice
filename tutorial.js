@@ -95,4 +95,12 @@ let questionPage = async function (question) {
   // }
 };
 
-readFirstPage();
+let checkMax = function () {
+  let max = 0;
+  playerPoint.forEach((point) => {
+    if (max < point) max = point;
+  });
+  return max;
+};
+
+//readFirstPage();
