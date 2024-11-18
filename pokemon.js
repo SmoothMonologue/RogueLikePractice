@@ -434,6 +434,7 @@ class Pokemon {
           defType == typeOfPoke[17]
         )
           return lose;
+        else return draw;
       }
 
       //풀 타입 상성
@@ -450,6 +451,7 @@ class Pokemon {
           defType == typeOfPoke[17]
         )
           return lose;
+        else return draw;
       }
 
       //물 타입 상성
@@ -458,6 +460,7 @@ class Pokemon {
           return win;
         else if (defType == typeOfPoke[2] || defType == typeOfPoke[3] || defType == typeOfPoke[17])
           return lose;
+        else return draw;
       }
 
       //전기 타입 상성
@@ -466,12 +469,14 @@ class Pokemon {
         else if (defType == typeOfPoke[3] || defType == typeOfPoke[12]) return win;
         else if (defType == typeOfPoke[2] || defType == typeOfPoke[4] || defType == typeOfPoke[17])
           return lose;
+        else return draw;
       }
 
       //노말 타입 상성
       case typeOfPoke[5]: {
         if (defType == typeOfPoke[7]) return invalid;
         else if (defType == typeOfPoke[10] || defType == typeOfPoke[11]) return lose;
+        else return draw;
       }
 
       //격투 타입 상성
@@ -493,6 +498,7 @@ class Pokemon {
           defType == typeOfPoke[18]
         )
           return lose;
+        else return draw;
       }
 
       //고스트 타입 상성
@@ -500,6 +506,7 @@ class Pokemon {
         if (defType == typeOfPoke[5]) return invalid;
         else if (defType == typeOfPoke[7] || defType == typeOfPoke[8]) return win;
         else if (defType == typeOfPoke[16]) return lose;
+        else return draw;
       }
 
       //에스퍼 타입 상성
@@ -507,6 +514,7 @@ class Pokemon {
         if (defType == typeOfPoke[16]) return invalid;
         else if (defType == typeOfPoke[6] || defType == typeOfPoke[15]) return win;
         else if (defType == typeOfPoke[8] || defType == typeOfPoke[11]) return lose;
+        else return draw;
       }
 
       //땅 타입 상성
@@ -521,6 +529,7 @@ class Pokemon {
         )
           return win;
         else if (defType == typeOfPoke[2] || defType == typeOfPoke[13]) return lose;
+        else return draw;
       }
 
       //바위 타입 상성
@@ -534,6 +543,7 @@ class Pokemon {
           return win;
         else if (defType == typeOfPoke[6] || defType == typeOfPoke[9] || defType == typeOfPoke[11])
           return lose;
+        else return draw;
       }
 
       //강철 타입 상성
@@ -547,6 +557,7 @@ class Pokemon {
           defType == typeOfPoke[11]
         )
           return lose;
+        else return draw;
       }
 
       //비행 타입 상성
@@ -555,6 +566,7 @@ class Pokemon {
           return win;
         else if (defType == typeOfPoke[4] || defType == typeOfPoke[10] || defType == typeOfPoke[11])
           return lose;
+        else return draw;
       }
 
       //벌레 타입 상성
@@ -571,6 +583,7 @@ class Pokemon {
           defType == typeOfPoke[18]
         )
           return lose;
+        else return draw;
       }
 
       //얼음 타입 상성
@@ -589,6 +602,7 @@ class Pokemon {
           defType == typeOfPoke[14]
         )
           return lose;
+        else return draw;
       }
 
       //독 타입 상성
@@ -602,6 +616,7 @@ class Pokemon {
           defType == typeOfPoke[15]
         )
           return lose;
+        else return draw;
       }
 
       //악 타입 상성
@@ -609,6 +624,7 @@ class Pokemon {
         if (defType == typeOfPoke[7] || defType == typeOfPoke[8]) return win;
         else if (defType == typeOfPoke[6] || defType == typeOfPoke[16] || defType == typeOfPoke[18])
           return lose;
+        else return draw;
       }
 
       //드래곤 타입 상성
@@ -616,6 +632,7 @@ class Pokemon {
         if (defType == typeOfPoke[18]) return invalid;
         else if (defType == typeOfPoke[17]) return win;
         else if (defType == typeOfPoke[11]) return lose;
+        else return draw;
       }
 
       //페어리 타입 상성
@@ -624,6 +641,7 @@ class Pokemon {
           return win;
         else if (defType == typeOfPoke[1] || defType == typeOfPoke[11] || defType == typeOfPoke[15])
           return lose;
+        else return draw;
       }
 
       default:
