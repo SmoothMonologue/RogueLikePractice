@@ -75,6 +75,7 @@ export let readFirstPage = async function () {
   await firstPage('너는 아무래도');
   console.log(chalk.green(fulltext));
   await firstPage(checkMax() + '다!');
+  //일단 포켓몬 선정은 했는데 피카츄, 이브이가 선택되는 가능성은 아직 안 설정했고 여기서 고른 포켓몬으로 player 생성은 어떻게 하지?
   console.log(chalk.green(fulltext));
   await firstPage('OK! 준비는 끝났다!');
   console.log(chalk.green(fulltext));
