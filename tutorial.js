@@ -30,7 +30,7 @@ const choosePlayer = [
   `,
 ];
 const startingPokemons = ['피카츄', '이상해씨', '파이리', '꼬부기', '이브이'];
-let playerPoint = [0, 0, 0, 0];
+const playerPoint = [0, 0, 0, 0];
 
 let readPage = function (text) {
   return new Promise(function (resolve) {
@@ -111,10 +111,15 @@ let questionPage = async function (question) {
 
 let checkMax = function () {
   let max = 0;
-  playerPoint.forEach((point) => {
-    if (max < point) max = point;
-  });
-  return startingPokemons[max];
+  let maxIndex = 0;
+
+  for (let i = 0; i < playerPoint.length; i++) {
+    if (max < playerPoint[i]) {
+      max = playerPoint[i];
+      maxIndex = i;
+    }
+  }
+  return startingPokemons[maxIndex];
 };
 
 //readFirstPage();

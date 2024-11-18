@@ -282,6 +282,8 @@ class Pokemon {
       return;
     } else if (value.length > 6) {
       console.log('포켓몬의 이름은 최대 6자입니다.');
+      //'야생의'를 붙이면 6자 넘어감
+      //return;
     }
     this._name = value;
   }
